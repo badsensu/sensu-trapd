@@ -50,4 +50,5 @@ class TrapHandler(object):
         return TrapEvent(''.join(e for e in self._do_substitutions(self.event_name, substitutions) if e.isalnum()),
                          self._do_substitutions(self.event_output, substitutions),
                          self.event_severity,
-                         self.event_handlers)
+                         self.event_handlers,
+                         self.event_source)
