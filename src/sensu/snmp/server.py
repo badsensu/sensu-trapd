@@ -74,7 +74,7 @@ class SensuTrapServer(object):
         event_name = trap_handler_config['event']['name']
         event_output = trap_handler_config['event']['output']
         event_handlers = trap_handler_config['event']['handlers']
-        event_source = trap_handler_config['event']['event_source']
+        event_source = trap_handler_config['event']['source']
         event_severity = parse_event_severity(trap_handler_config['event']['severity'])
 
         # TODO: parse predicates
@@ -107,6 +107,7 @@ class SensuTrapServer(object):
                 self._dispatch_trap_event(trap_event)
                 return
         LOG.warning("No trap handler found for %r" % (trap))
+        # TODO: add default handler here for unmatched traps?
 
     def stop(self):
         if not self._run:
