@@ -74,6 +74,7 @@ class SensuTrapServer(object):
         event_name = trap_handler_config['event']['name']
         event_output = trap_handler_config['event']['output']
         event_handlers = trap_handler_config['event']['handlers']
+        event_source = trap_handler_config['event']['event_source']
         event_severity = parse_event_severity(trap_handler_config['event']['severity'])
 
         # TODO: parse predicates
@@ -85,6 +86,7 @@ class SensuTrapServer(object):
                                     event_output,
                                     event_handlers,
                                     event_severity,
+                                    event_source,
                                     None)
         return trap_handler
 
