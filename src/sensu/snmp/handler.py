@@ -47,7 +47,7 @@ class TrapHandler(object):
 
     def transform(self, trap):
         substitutions = self._build_substitutions(trap)
-        return TrapEvent(self._do_substitutions(self.event_name, substitutions).join(e for e in string if e.isalnum()),
+        return TrapEvent(''.join(e for e in self._do_substitutions(self.event_name, substitutions) if e.isalnum()),
                          self._do_substitutions(self.event_output, substitutions),
                          self.event_severity,
                          self.event_handlers)
