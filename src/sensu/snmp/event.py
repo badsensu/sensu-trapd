@@ -16,8 +16,8 @@ class TrapEvent(object):
         return json.dumps({'name': self.name,
                            'output': self.output,
                            'status': self.status,
-                           'handlers': self.handlers},
-                           'source': self.source)
+                           'handlers': self.handlers,
+                           'source': self.source})
 
     def __repr__(self):
         return "<TrapEvent name:'%s' >" % (self.name)
