@@ -1,0 +1,88 @@
+#!/bin/sh
+#
+# Start/stop the sensu-trapd service
+#
+# chkconfig: 2345 90 60
+
+RETVAL=0
+prog="sensu-trapd"
+exec="/opt/sensu-trapd/bin/$prog"
+prog_path="/var/www/gslbconsole/servicemonitor"
+lockfile=/var/lock/subsys/sensu-trapd
+exec_user="root"
+
+cfg_file=/opt/sensu-trapd/conf/config.json
+log_level=DEBUG
+
+PID=`ps -ef | grep sensu-trapd | grep python | awk '{print $2}'`
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+
+start() {
+    [ -x $exec ] || exit 5
+    echo -n $"Starting $prog: "
+    $exec -c $cfg_file -l $log_level > /dev/null 2>&1 &
+    retval=$?
+    sleep 2
+    PID=`ps -ef | grep sensu-trapd | grep python | awk '{print $2}'` 
+    echo "${PID}"
+    [ $retval -eq 0 ] && touch $lockfile
+}
+
+stop() {
+    if [ $UID -ne 0 ] ; then
+        echo "User has insufficient privilege."
+        exit 4
+    fi
+    echo -n $"Stopping $prog: "
+	if [ "X${PID}" != 'X' ]; then
+		kill -9 ${PID}
+		RETVAL=3
+	else
+		failure $"Stopping $prog"
+	fi
+    retval=$?
+    sleep 2
+    echo "Done"
+    [ $retval -eq 0 ] && rm -f $lockfile
+}
+
+restart() {
+    status && stop
+    start
+}
+
+
+status() {
+    if [ "X${PID}" = 'X' ]; 
+    then
+    	echo "${prog} is not running"
+    	return 1
+    else
+    	echo "${prog} is running : ${PID}"
+    	return 0
+    fi
+}
+
+case "$1" in
+    start)
+        status && exit 0
+        $1
+        ;;
+    stop)
+        status || exit 0
+        $1
+        ;;
+    restart)
+        $1
+        ;;
+    status)
+        status
+        ;;
+    *)
+        echo $"Usage: $0 {start|stop|status|restart}"
+        exit 2
+esac
+exit $?

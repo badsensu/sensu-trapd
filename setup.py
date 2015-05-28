@@ -11,6 +11,7 @@ distro = platform.dist()[0]
 data_files = list()
 data_files.append(('', ['requirements.txt', 'version.txt']))
 data_files.append(('', ['conf/config.json.default', 'conf/traps.json.default']))
+data_files.append(('/etc/init.d', ['bin/sensu-trapd']))
 
 def get_version():
     """ 
