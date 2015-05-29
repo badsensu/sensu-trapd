@@ -23,7 +23,7 @@ PID=`ps -ef | grep sensu-trapd | grep python | awk '{print $2}'`
 start() {
     [ -x $exec ] || exit 5
     echo -n $"Starting $prog: "
-    $exec -c $cfg_file -l $log_level > /dev/null 2>&1 &
+    $exec -c $cfg_file -l $log_level -f > /dev/null 2>&1 &
     retval=$?
     sleep 2
     PID=`ps -ef | grep sensu-trapd | grep python | awk '{print $2}'` 
