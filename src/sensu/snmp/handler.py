@@ -4,7 +4,7 @@ from sensu.snmp.log import log
 
 class TrapHandler(object):
 
-    def __init__(self, trap_type, trap_args, event_name, event_output, event_handlers, event_severity, predicates=None):
+    def __init__(self, trap_type, trap_args, event_name, event_output, event_handlers, event_severity, event_source, predicates=None):
         if predicates is None:
             predicates = dict()
 
@@ -14,6 +14,7 @@ class TrapHandler(object):
         self.event_output = event_output
         self.event_handlers = event_handlers
         self.event_severity = event_severity
+        self.event_source = event_source
         self.predicates = predicates
 
     def handles(self, trap):
@@ -46,7 +47,8 @@ class TrapHandler(object):
 
     def transform(self, trap):
         substitutions = self._build_substitutions(trap)
-        return TrapEvent(self._do_substitutions(self.event_name, substitutions),
+        return TrapEvent(''.join(e for e in self._do_substitutions(self.event_name, substitutions) if e.isalnum()),
                          self._do_substitutions(self.event_output, substitutions),
                          self.event_severity,
-                         self.event_handlers)
+                         self.event_handlers,
+                         self.event_source)
