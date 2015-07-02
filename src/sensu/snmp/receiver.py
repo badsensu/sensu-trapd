@@ -145,7 +145,10 @@ class TrapReceiver(object):
                 else:
                     # all other values should be converted to mib symbol/modname
                     # and put in the trap_data dict
-                    trap_arg_oid = oid
+                    #trap_arg_oid = oid
+                    # For the case the faultIndex was added into the OID, we have to lookup 
+                    # the original OID from MIB instead of using the OID in the received packet directly.
+                    trap_arg_oid = self._mibs.lookup(module, symbol)
                     # convert value
                     trap_arg_value = self._mibs.lookup_value(module, symbol, val)
                     trap_args[trap_arg_oid] = trap_arg_value
